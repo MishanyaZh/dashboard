@@ -33,8 +33,8 @@ const AddUserModal = ({ show, handleClose }) => {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-      // dispatch(addUser({ newUser })); //local changes
-      dispatch(addUserAction(newUser)); //fake request ;only 'post' will not give an error with new user, so I decided to not comment it out.
+      dispatch(addUser({ newUser }));
+      // dispatch(addUserAction(newUser));
       handleClose();
       setNewUser({
         id: '',

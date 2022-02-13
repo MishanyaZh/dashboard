@@ -4,6 +4,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL = `https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data`;
 axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.put['Content-Type'] = 'application/json';
 
 export const fetchUsersAction = createAsyncThunk(
   'users/fetchUsersAction',
@@ -28,11 +29,6 @@ export const addUserAction = createAsyncThunk(
     try {
       const user = {
         ...newUser,
-        // id: newUser.id,
-        // name: newUser.name,
-        // username: newUser.username,
-        // email: newUser.id,
-        // city: newUser.city,
       };
       const responce = await axios.post(axios.defaults.baseURL, user);
       console.log(responce.data);
@@ -40,6 +36,32 @@ export const addUserAction = createAsyncThunk(
       if (responce.status !== 200) {
         throw new Error('Error!!!');
       }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+export const edithUsersAction = createAsyncThunk(
+  'users/edithUsersAction',
+  async (id, { rejectWithValue, dispatch, getState }) => {
+    const Users = getState().users.users;
+    const edithUser = Users.find(user => user.id === id.id);
+
+    try {
+      const user = {
+        id: edithUser.id,
+        name: edithUser.name,
+        username: edithUser.username,
+        email: edithUser.email,
+        city: edithUser.address.city,
+      };
+      const responce = await axios.put(`${id.id}`, user);
+      if (responce.status !== 200) {
+        throw new Error('Error!!!');
+      }
+      return responce.data;
+      // dispatch(editUser(responce.data));
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -60,26 +82,5 @@ export const deletehUsersAction = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.message);
     }
-  },
-);
-
-export const edithUsersAction = createAsyncThunk(
-  'users/edithUsersAction',
-  async (newUser, { dispatch }) => {
-    // console.log(newUser);
-    const id = newUser.id;
-    const requestOptions = {
-      method: 'PUT',
-      heders: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...newUser }),
-    };
-    const response = await fetch(
-      `https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data/1${id}`,
-      requestOptions,
-    );
-    const data = await response.json();
-    console.log(data.meta.arg);
-
-    dispatch(editUser(...data.meta.arg));
   },
 );

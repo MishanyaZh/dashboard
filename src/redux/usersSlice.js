@@ -65,16 +65,23 @@ const usersSlice = createSlice({
       state.error = action.payload;
     },
     [deletehUsersAction.rejected]: (state, action) => {
-      state.status = action.meta.requestStatus;
-      state.error = action.payload;
+      // state.status = action.meta.requestStatus;
+      // state.error = action.payload;
     },
     [edithUsersAction.fulfilled]: (state, action) => {
-      console.log(action.payload);
-      state.users = action.payload;
-      state.status = action.meta.requestStatus;
+      console.log(action);
+      state.users.forEach((user, index) => {
+        if (user.id === action.payload.id) {
+          state.users[index] = {
+            ...action.payload,
+            address: { ...state.address, city: action.payload.city },
+          };
+        }
+        return state.users;
+      });
     },
     [edithUsersAction.rejected]: (state, action) => {
-      console.log(action.meta.arg);
+      console.log(action.payload);
     },
   },
 });

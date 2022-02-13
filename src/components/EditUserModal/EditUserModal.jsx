@@ -42,10 +42,8 @@ const EditUserModal = ({ userToEdit, showEditModal, handlerCloseEditUser }) => {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-      // dispatch(editUser({ newUser }));
-
-      dispatch(edithUsersAction(newUser));
-
+      dispatch(editUser({ newUser }));
+      // dispatch(edithUsersAction(newUser));
       handlerCloseEditUser();
     }
     setValidated(true);
