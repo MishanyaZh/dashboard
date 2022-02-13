@@ -1,38 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { selectUsersData, selectUsersStatus } from './redux/usersSlice';
 import { fetchUsersAction } from './redux/users-operations';
+import { Container, Col, Row, Button, Card } from 'react-bootstrap';
+
+import UsersList from './components/UsersList/UsersList';
+import AddUserModal from './components/AddUserModal/AddUserModal';
 
 import './App.css';
 function App() {
-  const users = useSelector(selectUsersData);
-  const status = useSelector(selectUsersStatus);
   const dispatch = useDispatch();
-  console.log(users);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     dispatch(fetchUsersAction());
   }, [dispatch]);
 
   return (
-    <div className="App">
-      list
-      <ul>
-        {status === 'pending' ? (
-          <p>loading</p>
-        ) : (
-          users.map((user, id) => (
-            <li key={id}>
-              <p>{user.id}</p>
-              <p>{user.name}</p>
-              <p>{user.username}</p>
-              <p>{user.email}</p>
-            </li>
-          ))
-        )}
-      </ul>
-    </div>
+    <Container>
+      <Row>
+        <Col>
+          <Card bg="light">
+            <Card.Header>Dashboard</Card.Header>
+            <Card.Body>
+              <Card.Title>
+                User list
+                <AddUserModal show={show} handleClose={handleClose} />
+                <Button variant="primary" onClick={handleShow}>
+                  Add new
+                </Button>
+              </Card.Title>
+              <UsersList />
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

@@ -1,11 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUsersAction } from './users-operations';
+import {
+  fetchUsersAction,
+  deletehUsersAction,
+  edithUsersAction,
+} from './users-operations';
 
 const usersSlice = createSlice({
   name: 'users',
   initialState: {
     users: [],
     status: null,
+    error: null,
   },
   reducers: {
     addUser(state, action) {
@@ -18,22 +23,65 @@ const usersSlice = createSlice({
       });
     },
 
-    deleteUser(state, action) {},
-    editUser(state, action) {},
+    deleteUser(state, action) {
+      state.users = state.users.filter(user => user.id !== action.payload.id);
+    },
+
+    editUser(state, action) {
+      // state.users.forEach((user, index) => {
+      //   if (user.id === action.payload.newUser.id) {
+      //     state.users[index] = {
+      //       id: action.payload.newUser.id,
+      //       name: action.payload.newUser.name,
+      //       username: action.payload.newUser.username,
+      //       email: action.payload.newUser.email,
+      //       address: { ...state.address, city: action.payload.newUser.city },
+      //     };
+      //   }
+      //   return state.users;
+      // });
+      state.users.forEach((user, index) => {
+        if (user.id === action.payload.newUser.id) {
+          state.users[index] = {
+            ...action.payload.newUser,
+            address: { ...state.address, city: action.payload.newUser.city },
+          };
+        }
+        return state.users;
+      });
+    },
   },
   extraReducers: {
+    [fetchUsersAction.pending]: (state, action) => {
+      state.status = action.meta.requestStatus;
+      state.error = null;
+    },
     [fetchUsersAction.fulfilled]: (state, action) => {
-      console.log(action);
+      state.status = action.meta.requestStatus;
+      state.users = action.payload;
+    },
+    [fetchUsersAction.rejected]: (state, action) => {
+      state.status = action.meta.requestStatus;
+      state.error = action.payload;
+    },
+    [deletehUsersAction.rejected]: (state, action) => {
+      state.status = action.meta.requestStatus;
+      state.error = action.payload;
+    },
+    [edithUsersAction.fulfilled]: (state, action) => {
+      console.log(action.payload);
       state.users = action.payload;
       state.status = action.meta.requestStatus;
-      console.log(state.status);
-      console.log(state.users);
+    },
+    [edithUsersAction.rejected]: (state, action) => {
+      console.log(action.meta.arg);
     },
   },
 });
 
 export const selectUsersStatus = state => state.users.status;
 export const selectUsersData = state => state.users.users;
+export const statusError = state => state.users.error;
 
-export const { addUser, deleteUser, editUser, fetchUsers } = usersSlice.actions;
+export const { addUser, deleteUser, editUser } = usersSlice.actions;
 export default usersSlice.reducer;
