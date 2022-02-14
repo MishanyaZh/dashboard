@@ -63,14 +63,15 @@ const usersSlice = createSlice({
     },
     [fetchUsersAction.rejected]: (state, action) => {
       state.status = action.meta.requestStatus;
-      state.error = action.payload;
+      // state.error = action.payload;
+      console.log(action.payload);
     },
     [addUserAction.fulfilled]: (state, action) => {
       state.users.push(action.payload);
     },
     [addUserAction.rejected]: (state, action) => {
-      state.status = action.meta.requestStatus;
-      state.error = action.payload;
+      // state.error = action.payload;
+      console.log(action.payload);
     },
     [deletehUsersAction.fulfilled]: (state, action) => {
       state.users = state.users.filter(user => user.id !== action.payload.id);
@@ -78,7 +79,7 @@ const usersSlice = createSlice({
     },
     [deletehUsersAction.rejected]: (state, action) => {
       console.log(action.payload);
-      state.error = action.payload;
+      // state.error = action.payload;
     },
     [edithUsersAction.fulfilled]: (state, action) => {
       const editUser = state.users.find(user => user.id === action.payload.id);
@@ -97,7 +98,7 @@ const usersSlice = createSlice({
       // });
     },
     [edithUsersAction.rejected]: (state, action) => {
-      state.error = action.payload;
+      // state.error = action.payload;
       console.log(action.payload);
     },
   },
