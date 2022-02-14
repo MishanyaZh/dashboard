@@ -72,9 +72,13 @@ const usersSlice = createSlice({
       state.status = action.meta.requestStatus;
       state.error = action.payload;
     },
+    [deletehUsersAction.fulfilled]: (state, action) => {
+      state.users = state.users.filter(user => user.id !== action.payload.id);
+      state.status = action.meta.requestStatus;
+    },
     [deletehUsersAction.rejected]: (state, action) => {
-      // state.status = action.meta.requestStatus;
-      // state.error = action.payload;
+      console.log(action.payload);
+      state.error = action.payload;
     },
     [edithUsersAction.fulfilled]: (state, action) => {
       console.log(action);

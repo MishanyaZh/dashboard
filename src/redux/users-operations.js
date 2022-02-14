@@ -76,7 +76,7 @@ export const deletehUsersAction = createAsyncThunk(
         throw new Error('Error!!!');
       }
 
-      dispatch(deleteUser({ id }));
+      return { id: id };
     } catch (error) {
       return rejectWithValue(error.message);
     }
