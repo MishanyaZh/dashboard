@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
   fetchUsersAction,
+  addUserAction,
   deletehUsersAction,
   edithUsersAction,
 } from './users-operations';
@@ -61,6 +62,13 @@ const usersSlice = createSlice({
       state.users = action.payload;
     },
     [fetchUsersAction.rejected]: (state, action) => {
+      state.status = action.meta.requestStatus;
+      state.error = action.payload;
+    },
+    [addUserAction.fulfilled]: (state, action) => {
+      state.users.push(action.payload);
+    },
+    [addUserAction.rejected]: (state, action) => {
       state.status = action.meta.requestStatus;
       state.error = action.payload;
     },

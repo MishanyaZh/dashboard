@@ -33,8 +33,8 @@ const AddUserModal = ({ show, handleClose }) => {
     if (form.checkValidity() === false) {
       event.stopPropagation();
     } else {
-      dispatch(addUser({ newUser }));
-      // dispatch(addUserAction(newUser));
+      // dispatch(addUser({ newUser }));
+      dispatch(addUserAction(newUser));
       handleClose();
       setNewUser({
         id: '',

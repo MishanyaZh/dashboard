@@ -25,17 +25,19 @@ export const fetchUsersAction = createAsyncThunk(
 export const addUserAction = createAsyncThunk(
   'users/addUserAction',
 
-  async (newUser, { rejectWithValue, dispatch }) => {
+  async (newUser, { rejectWithValue }) => {
     try {
       const user = {
-        ...newUser,
+        name: newUser.name,
+        email: newUser.email,
+        id: newUser.id,
       };
       const responce = await axios.post(axios.defaults.baseURL, user);
-      console.log(responce.data);
 
-      if (responce.status !== 200) {
+      if (responce.status !== 201) {
         throw new Error('Error!!!');
       }
+      return responce.data;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -44,24 +46,20 @@ export const addUserAction = createAsyncThunk(
 
 export const edithUsersAction = createAsyncThunk(
   'users/edithUsersAction',
-  async (id, { rejectWithValue, dispatch, getState }) => {
-    const Users = getState().users.users;
-    const edithUser = Users.find(user => user.id === id.id);
-
+  async (id, { rejectWithValue }) => {
     try {
       const user = {
-        id: edithUser.id,
-        name: edithUser.name,
-        username: edithUser.username,
-        email: edithUser.email,
-        city: edithUser.address.city,
+        id: id.id,
+        name: id.name,
+        username: id.username,
+        email: id.email,
+        city: id.city,
       };
       const responce = await axios.put(`${id.id}`, user);
       if (responce.status !== 200) {
         throw new Error('Error!!!');
       }
       return responce.data;
-      // dispatch(editUser(responce.data));
     } catch (error) {
       return rejectWithValue(error.message);
     }
