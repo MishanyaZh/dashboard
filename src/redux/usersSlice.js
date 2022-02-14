@@ -81,18 +81,23 @@ const usersSlice = createSlice({
       state.error = action.payload;
     },
     [edithUsersAction.fulfilled]: (state, action) => {
-      console.log(action);
-      state.users.forEach((user, index) => {
-        if (user.id === action.payload.id) {
-          state.users[index] = {
-            ...action.payload,
-            address: { ...state.address, city: action.payload.city },
-          };
-        }
-        return state.users;
-      });
+      const editUser = state.users.find(user => user.id === action.payload.id);
+      editUser.name = action.payload.name;
+      editUser.username = action.payload.username;
+      editUser.email = action.payload.email;
+      editUser.address.city = action.payload.city;
+      // state.users.forEach((user, index) => {
+      //   if (user.id === action.payload.id) {
+      //     state.users[index] = {
+      //       ...action.payload,
+      //       address: { ...state.address, city: action.payload.city },
+      //     };
+      //   }
+      //   return state.users;
+      // });
     },
     [edithUsersAction.rejected]: (state, action) => {
+      state.error = action.payload;
       console.log(action.payload);
     },
   },

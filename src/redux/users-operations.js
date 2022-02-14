@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { deleteUser, editUser } from './usersSlice';
 import axios from 'axios';
 
 axios.defaults.baseURL = `https://my-json-server.typicode.com/karolkproexe/jsonplaceholderdb/data`;
@@ -37,6 +36,7 @@ export const addUserAction = createAsyncThunk(
       if (responce.status !== 201) {
         throw new Error('Error!!!');
       }
+
       return responce.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -56,9 +56,11 @@ export const edithUsersAction = createAsyncThunk(
         city: id.city,
       };
       const responce = await axios.put(`${id.id}`, user);
+
       if (responce.status !== 200) {
         throw new Error('Error!!!');
       }
+
       return responce.data;
     } catch (error) {
       return rejectWithValue(error.message);
